@@ -11,7 +11,7 @@ const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const User = require('./models/user');
 
-mongoose.connect('mongodb://localhost:27017/yelp-camp')
+mongoose.connect('mongodb://localhost:27017/my-yelp-camp')
     .then(() => {
         console.log('MONGO DATABASE CONNECTED!');
     })
@@ -57,13 +57,9 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
-    // if (req.originalUrl !== '/login' && req.originalUrl !== '/register' && req.originalUrl !== '/') {
-    //     req.session.returnTo = req.originalUrl;
-    // }
-    if (!['/login', '/register', '/'].includes(req.originalUrl)) {
+    if (!['/login', '/register', '/'].includes(req.originalUrl) && !req.originalUrl.includes('reviews')) {
         req.session.returnTo = req.originalUrl;
     }
-    // console.log(req.session.returnTo);
     res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');

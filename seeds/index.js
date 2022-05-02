@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 const Campground = require('../models/campground');
+const Review = require('../models/review');
 const cities = require('./cities');
 const { descriptors, places } = require('./seedHelpers');
 
-mongoose.connect('mongodb://localhost:27017/yelp-camp')
+mongoose.connect('mongodb://localhost:27017/my-yelp-camp')
     .then(() => {
         console.log('MONGO CONNECTION OPEN!');
     })
@@ -16,11 +17,13 @@ const sample = (array) => array[Math.floor(Math.random() * array.length)];
 
 const seedDB = async () => {
     await Campground.deleteMany({});
+    await Review.deleteMany({});
     for (let i = 0; i < 50; i++) {
         const random1000 = Math.floor(Math.random() * 1000);
         const price = Math.floor(Math.random() * 30) + 10;
         const camp = new Campground(
             {
+                author: '626bddceb46fa7f7d84a8b9e',
                 title: `${sample(descriptors)} ${sample(places)}`,
                 location: `${cities[random1000].city}, ${cities[random1000].state}`,
                 image: 'https://source.unsplash.com/collection/483251',
