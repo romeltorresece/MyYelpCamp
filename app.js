@@ -34,6 +34,7 @@ const reviewRoutes = require('./routes/reviews');
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+app.set('trust proxy', 1); // express-session to trust poxy when cookie's secure attribute is set
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
