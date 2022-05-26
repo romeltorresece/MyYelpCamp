@@ -19,7 +19,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label" for="price">Price</label>
-                <div class="input-group">
+                <div class="input-group has-validation">
                     <span class="input-group-text" id="price-label">$</span>
                     <input class="form-control" id="price" type="text" name="campground[price]" placeholder="0.00"
                         aria-label="price" aria-describedby="price-label" value="<%= campground.price %>" required>
@@ -42,7 +42,7 @@
             <div class="row">
                 <p>Choose Image(s) to Delete:</p>
                 <% campground.images.forEach(function(img, i) { %>
-                    <div class="col-4 col-md-4">
+                    <div class="col-4">
                         <div class="card mb-3">
                             <img src="<%= img.thumbnail %>" class="card-img" alt="">
                             <div class="card-img-overlay text-end pt-1 pe-1">

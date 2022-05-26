@@ -79,6 +79,7 @@ const scriptSrcUrls = [
     "https://kit.fontawesome.com/",
     "https://cdnjs.cloudflare.com/",
     "https://cdn.jsdelivr.net",
+    "https://unpkg.com",
 ];
 const styleSrcUrls = [
     "https://kit-free.fontawesome.com/",
@@ -117,6 +118,8 @@ app.use(helmet.contentSecurityPolicy({
     }
 }));
 
+app.locals.moment = require('moment');
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -126,8 +129,10 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
-    if (!['/login', '/register', '/'].includes(req.originalUrl) && !req.originalUrl.includes('reviews')) {
-        req.session.returnTo = req.originalUrl;
+    if (!['/login', '/register', '/'].includes(req.originalUrl) 
+        && !req.originalUrl.includes('reviews') 
+        && !(/page=\d+/.test(req.originalUrl))) {
+            req.session.returnTo = req.originalUrl;
     }
     res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');

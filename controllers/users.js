@@ -25,13 +25,14 @@ module.exports.renderLogin = (req, res) => {
 };
 
 module.exports.login = (req, res) => {
+    // console.log('inside post /login', req.session)
     const redirectUrl = req.session.returnTo || '/campgrounds';
     delete req.session.returnTo;
     req.flash('success', 'Welcome Back!');
     res.redirect(redirectUrl);
 };
 
-module.exports.logout = (req, res) => {
+module.exports.logout = (req, res, next) => {
     req.logout();
     req.flash('success', 'Goodbye!');
     res.redirect('/campgrounds');

@@ -1,8 +1,11 @@
 <% layout('layouts/boilerplate') -%>
+<% if (!campgrounds.hasPrevPage) { %>
 <div id="cluster-map" class="mb-3"></div>
-<div class="container">
-    <h1>All Campgrounds</h1>
-    <% for (let campground of campgrounds) { %>
+<% } %>
+<h1>All Campgrounds <%= campgrounds.page !== 1 ? ('- Page ' + campgrounds.page) : '' %></h1>
+<div id="campgrounds-container">
+    <div class="campgrounds">
+    <% for (let campground of campgrounds.docs) { %>
         <div class="card mb-3">
             <div class="row">
                 <div class="col-md-4">
@@ -15,21 +18,38 @@
                 <div class="col-md-8">
                     <div class="card-body">
                         <h5 class="card-title"><%= campground.title %></h5>
-                        <p class="card-text"><%= campground.description %></p>
+                        <p class="card-text"><%= campground.description.substring(0, 150) %>...</p>
                         <p class="card-text">
                             <small class="text-muted"><%= campground.location  %></small>
                         </p>
-                        <a class="btn btn-primary" href="/campgrounds/<%= campground._id %>">View <%= campground.title %></a>
+                        <a class="btn btn-outline-dark" href="/campgrounds/<%= campground._id %>">View <%= campground.title %></a>
                     </div>
                 </div> 
             </div>       
         </div>            
     <% } %>
+    </div>
+</div>
+<% if (!campgrounds.hasPrevPage) { %>
+<div class="page-load-status mb-5">
+    <div class="loader-ellips infinite-scroll-request">
+        <span class="loader-ellips__dot"></span>
+        <span class="loader-ellips__dot"></span>
+        <span class="loader-ellips__dot"></span>
+        <span class="loader-ellips__dot"></span>
+    </div>
+    <p class="infinite-scroll-last">End of content</p>
+    <p class="infinite-scroll-error">No more pages to load</p>
 </div>
 
-    <script>
-        const mapToken = "<%- process.env.MAPBOX_TOKEN %>";
-        const campgrounds = { features: <%- JSON.stringify(campgrounds) %> };
-    </script>
+<script>
+    const mapToken = "<%- process.env.MAPBOX_TOKEN %>";
+    const campgrounds = { features: <%- JSON.stringify(allCampgrounds) %> };
+    const data = <%- JSON.stringify(campgrounds) %>;
+</script>
+<script src="/javascripts/clusterMap.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/infinite-scroll@4/dist/infinite-scroll.pkgd.min.js"></script>
+<script src="/javascripts/paginate.js"></script>
+<% } %>
 
-    <script src="/javascripts/clusterMap.js"></script>

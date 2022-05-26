@@ -2,10 +2,20 @@ const Campground = require('../models/campground');
 const { cloudinary } = require('../cloudinary');
 const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 const geocoder = mbxGeocoding({ accessToken: process.env.MAPBOX_TOKEN });
+const ExpressError = require('../utils/ExpressError');
 
-module.exports.index = async (req, res) => {
-    const campgrounds = await Campground.find({});
-    res.render('campgrounds/index', { campgrounds });
+module.exports.index = async (req, res, next) => {
+    const { page = 1 } = req.query;
+    const campgrounds = await Campground.paginate({}, {
+        page,
+        sort: {
+            createdAt: -1
+        },
+        limit: 20,
+    });
+    if (!campgrounds.docs.length) return next(new ExpressError('PAGE NOT FOUND!', 404));
+    const allCampgrounds = await Campground.find({});
+    res.render('campgrounds/index', { campgrounds, allCampgrounds });
 };
 
 module.exports.renderNewForm = (req, res) => {
