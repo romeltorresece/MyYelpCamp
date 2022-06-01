@@ -13,11 +13,15 @@ module.exports.isLoggedIn = (req, res, next) => {
 };
 
 module.exports.isAuthor = catchAsync(async (req, res, next) => {
-    const { id } = req.params;
-    const campground = await Campground.findById(id);
+    const { slug } = req.params;
+    const campground = await Campground.findOne({ slug });
+    if (!campground) {
+        req.flash('error', 'Campground Not Found!');
+        return res.redirect('/campgrounds');
+    }
     if (!campground.author.equals(req.user._id)) {
         req.flash('error', 'You do not have permission to do that!');
-        return res.redirect(`/campgrounds/${campground._id}`);
+        return res.redirect(`/campgrounds/${campground.slug}`);
     }
     next();
 });

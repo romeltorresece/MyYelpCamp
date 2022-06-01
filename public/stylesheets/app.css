@@ -13,6 +13,8 @@
   object-fit: contain;
 }
 
+/* infinite-scroll plugin css defaults for page-load-status */
+
 .page-load-status {
   display: none; /* hidden by default */
   padding-top: 20px;
@@ -21,9 +23,11 @@
   color: #777;
 }
 
-.page-load-status.last-page, .page-load-status.last-page .infinite-scroll-last {
+/* infinite-scroll plugin default to show the page-load-status at last page when using  */
+/* json data as responseBody */
+/* .page-load-status.last-page, .page-load-status.last-page .infinite-scroll-last {
 	display: block !important;
-}
+} */
 
 .loader-ellips {
     font-size: 10px; /* change size here */
